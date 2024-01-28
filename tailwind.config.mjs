@@ -5,7 +5,15 @@ export default {
     extend: {
       fontFamily: {
         warsaw: ["Warsaw", "sans-serif"],
-		theinhardt: ["Theinhardt", "sans-serif"],
+        theinhardt: ["Theinhardt", "sans-serif"],
+      },
+      container: {
+        center: true, // if you want to center the container
+        padding: "2rem", // custom padding
+        screens: {
+          xl: "1280px",
+          "2xl": "1280px",
+        },
       },
     },
   },
