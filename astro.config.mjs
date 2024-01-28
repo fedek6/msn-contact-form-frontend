@@ -8,8 +8,4 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  i18n: {
-    defaultLocale: "pl",
-    locales: ["en", "pl"],
-  },
 });

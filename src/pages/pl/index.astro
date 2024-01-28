@@ -1,0 +1,14 @@
+---
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import Layout from "../../layouts/Layout.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title="MSN.">
+  <main>
+    <h1 class="text-5xl font-bold underline text-white">Hello world!</h1>
+	<p class="text-white">{t('nav.home')}</p>
+  </main>
+</Layout>
