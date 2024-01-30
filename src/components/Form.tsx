@@ -1,6 +1,7 @@
 import React, { type FormEvent, useState } from "react";
 import { TextInputGroup } from "./TextInputGroup";
 import { useTranslations } from "../i18n/utils";
+import { showLoader, redirectToThankYouPage, hideLoader } from "../utils/loaderUtils";
 import type { AvailableLanguages, ui } from "../i18n/ui";
 
 interface FormProps {
@@ -70,7 +71,7 @@ const validators: Validators = {
   email: (value: string) => ({
     isValid:
       value.length > 0 &&
-      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value),
+      /^\w+([+.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value),
     errorMsg: value.length === 0 ? "form.not_empty" : "form.email_error",
   }),
   institution: (value: string) => ({
@@ -117,6 +118,25 @@ function formReducer(state: FormState, action: FormAction): FormState {
 const isFieldName = (name: string): name is FieldName =>
   ["name", "surname", "institution", "email"].includes(name);
 
+const sendToApi = async (data: {
+  name: string;
+  surname: string;
+  email: string;
+  institution?: string;
+  language: AvailableLanguages;
+}) => {
+  const response = await fetch("https://zaproszenie.artmuseum.pl/api/", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  if (response.status !== 201) {
+    throw new Error(`API request failed with status ${response.status}`);
+  }
+
+  return response.json();
+}
+
 export const Form: React.FC<FormProps> = ({ lang }) => {
   const t = useTranslations(lang);
   const [state, dispatch] = React.useReducer(formReducer, initialState);
@@ -146,11 +166,26 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
     }
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (formValid) {
-      console.log("Form submitted:", state);
+      showLoader();
+
+      try {
+        await sendToApi({
+          name: state.name.value,
+          surname: state.surname.value,
+          email: state.email.value,
+          institution: state.institution.value,
+          language: lang,
+        });
+        window && redirectToThankYouPage(lang);
+      } catch (e) {
+        console.error(e);
+        alert(t("form.send_error"));
+        hideLoader();
+      }
     }
   };
 
@@ -210,7 +245,7 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
             type="checkbox"
             id="terms"
             name="terms"
-            className="w-8 h-8 bg-gray-300 border border-gray-400"
+            className="w-8 h-8 bg-gray-300 border border-gray-400 cursor-pointer"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               dispatch({ type: "INVALIDATE_FORM" });
 
@@ -218,7 +253,7 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
             }}
           />
         </div>
-        <label htmlFor="terms" className="text-base">
+        <label htmlFor="terms" className="text-base cursor-pointer">
           {t("form.terms")}
           <span className="text-red-500"> *</span>
         </label>
@@ -227,7 +262,7 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
       <div className="pt-8">
         <button
           type="submit"
-          className="bg-black text-white font-warsaw font-bold text-lg py-3 block w-full uppercase disabled:bg-gray-500"
+          className="bg-black text-white font-warsaw font-bold text-lg py-3 block w-full uppercase cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
           disabled={!formValid}
         >
           {t("form.submit")}

@@ -11,8 +11,8 @@ export default {
         center: true, // if you want to center the container
         padding: "2rem", // custom padding
         screens: {
-          xl: "1280px",
-          "2xl": "1280px",
+          xl: "1200px",
+          "2xl": "1500px",
         },
       },
       fontSize: {

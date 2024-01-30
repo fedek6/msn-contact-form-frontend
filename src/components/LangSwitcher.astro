@@ -5,7 +5,7 @@ import { getLangFromUrl } from "../i18n/utils";
 const currentLang = getLangFromUrl(Astro.url);
 ---
 
-<ul class="flex gap-x-2 text-base uppercase font-warsaw">
+<ul class="flex gap-x-2 text-base uppercase font-warsaw xl:gap-4">
   {
     Object.entries(languages).map(([lang, label]) => (
       <li>
@@ -13,8 +13,8 @@ const currentLang = getLangFromUrl(Astro.url);
           class:list={[
             "border py-2 px-4 block",
             {
-              "border-gray-400 text-gray-400": lang === currentLang,
-              "border-black": lang !== currentLang,
+              "border-gray-400 text-gray-400 cursor-not-allowed": lang === currentLang,
+              "border-black transition hover:bg-black hover:text-white": lang !== currentLang,
             },
           ]}
           href={`/${lang}/`}
