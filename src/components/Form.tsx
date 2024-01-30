@@ -210,7 +210,7 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
             type="checkbox"
             id="terms"
             name="terms"
-            className="w-8 h-8 bg-gray-300 border border-gray-400"
+            className="w-8 h-8 bg-gray-300 border border-gray-400 cursor-pointer"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               dispatch({ type: "INVALIDATE_FORM" });
 
@@ -218,7 +218,7 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
             }}
           />
         </div>
-        <label htmlFor="terms" className="text-base">
+        <label htmlFor="terms" className="text-base cursor-pointer">
           {t("form.terms")}
           <span className="text-red-500"> *</span>
         </label>
@@ -227,7 +227,7 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
       <div className="pt-8">
         <button
           type="submit"
-          className="bg-black text-white font-warsaw font-bold text-lg py-3 block w-full uppercase disabled:bg-gray-500"
+          className="bg-black text-white font-warsaw font-bold text-lg py-3 block w-full uppercase cursor-pointer disabled:bg-gray-500 disabled:cursor-not-allowed"
           disabled={!formValid}
         >
           {t("form.submit")}

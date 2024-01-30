@@ -15,7 +15,7 @@ export const TextLabel: React.FC<TextLabelProps> = ({
 }) => {
   return (
     <label
-      className={`font-warsaw font-bold text-lg ${!isValid && "text-red-600"}`}
+      className={`font-warsaw font-bold text-lg cursor-pointer ${!isValid && "text-red-600"}`}
       htmlFor={id}
     >
       {children}
