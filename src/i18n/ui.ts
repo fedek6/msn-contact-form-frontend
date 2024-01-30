@@ -17,6 +17,13 @@ export const ui = {
     "form.terms":
       "Wyrażam zgodę na przetwarzanie danych osobowych wskazanych w formularzu w celu przesłania przez Muzeum Sztuki Nowoczesnej w Warszawie (ul. Pańska 3, 00-124, Warszawa) informacji o prowadzonych przez Muzeum działaniach promocyjnych",
     "form.submit": "Wyślij",
+    "txt.disclaimer": `Administratorem danych osobowych jest Muzeum Sztuki Nowoczesnej w Warszawie
+    (ul. Pańska 3, 00-124, Warszawa). Więcej informacji na temat przetwarzania i
+    ochorny danych osobowych znajdziesz w naszej <a
+        class="underline"
+      href="https://artmuseum.pl/pl/polityka-prywatnosci"
+      target="_blank">Polityce Prywatności</a
+    >.`,
   },
   en: {
     "txt.header": "Join our contact list:",
@@ -29,6 +36,7 @@ export const ui = {
     "form.terms":
       "I agree to the processing of personal data indicated in the form in order to send information about promotional activities carried out by the Museum of Modern Art in Warsaw (Pańska st. 3, 00-124, Warsaw)",
     "form.submit": "Send",
+    "txt.disclaimer": `The administrator of personal data is the Museum of Modern Art in Warsaw (Pańska st. 3, 00-124, Warsaw). More information about the processing and protection of personal data can be found in our <a class="underline" href="https://artmuseum.pl/en/privacy-policy" target="_blank">Privacy Policy</a>.`,
   },
 } as const;
 

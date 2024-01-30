@@ -1,11 +1,9 @@
-<footer class="border-t border-t-black text-sm leading-5 pt-4">
-  <p>
-    Administratorem danych osobowych jest Muzeum Sztuki Nowoczesnej w Warszawie
-    (ul. Pańska 3, 00-124, Warszawa). Więcej informacji na temat przetwarzania i
-    ochorny danych osobowych znajdziesz w naszej <a
-        class="underline"
-      href="https://artmuseum.pl/pl/polityka-prywatnosci"
-      target="_blank">Polityce Prywatności</a
-    >.
-  </p>
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<footer class="border-t border-t-black text-sm xl:text-base leading-6 pt-4">
+  <p set:html={t("txt.disclaimer")} />
 </footer>
