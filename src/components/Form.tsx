@@ -98,15 +98,15 @@ function formReducer(state: FormState, action: FormAction): FormState {
         },
         surname: {
           ...state.surname,
-          isValid: validators["surname"](state.name.value).isValid,
+          isValid: validators["surname"](state.surname.value).isValid,
         },
         email: {
           ...state.email,
-          isValid: validators["email"](state.name.value).isValid,
+          isValid: validators["email"](state.email.value).isValid,
         },
         institution: {
           ...state.institution,
-          isValid: validators["institution"](state.name.value).isValid,
+          isValid: validators["institution"](state.institution.value).isValid,
         },
       };
     default:
