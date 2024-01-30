@@ -1,6 +1,7 @@
 import React, { type FormEvent, useState } from "react";
 import { TextInputGroup } from "./TextInputGroup";
 import { useTranslations } from "../i18n/utils";
+import { showLoader } from "../utils/loaderUtils";
 import type { AvailableLanguages, ui } from "../i18n/ui";
 
 interface FormProps {
@@ -150,6 +151,7 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
     event.preventDefault();
 
     if (formValid) {
+      showLoader();
       console.log("Form submitted:", state);
     }
   };
