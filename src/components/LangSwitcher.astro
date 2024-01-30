@@ -3,15 +3,24 @@ import { languages } from "../i18n/ui";
 import { getLangFromUrl } from "../i18n/utils";
 
 const currentLang = getLangFromUrl(Astro.url);
-
-
 ---
 
 <ul class="flex gap-x-2 text-base uppercase font-warsaw">
   {
     Object.entries(languages).map(([lang, label]) => (
       <li>
-        <a class={`border py-2 px-4 block ${(lang === currentLang) ? "border-gray-400 text-gray-400" : "border-black"}`} href={`/${lang}/`}>{label}</a>
+        <a
+          class:list={[
+            "border py-2 px-4 block",
+            {
+              "border-gray-400 text-gray-400": lang === currentLang,
+              "border-black": lang !== currentLang,
+            },
+          ]}
+          href={`/${lang}/`}
+        >
+          {label}
+        </a>
       </li>
     ))
   }

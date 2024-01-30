@@ -4,6 +4,8 @@ import Logo from "../../components/Logo.astro";
 import Layout from "../../layouts/Layout.astro";
 import LangSwitcher from "../../components/LangSwitcher.astro";
 import FooterInfo from "../../components/FooterInfo.astro";
+import { Form } from "../../components/Form.tsx";
+import HeaderTxt from "../../components/HeaderTxt.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -21,6 +23,10 @@ const t = useTranslations(lang);
         </div>
       </header>
       <section class="text-lg leading-7 pt-4">
+        <header class="pt-2 pb-6 xl:hidden">
+          <HeaderTxt />
+        </header>
+
         <p class="text-black pb-4">Cześć,</p>
 
         <p class="text-black pb-4">
@@ -46,8 +52,16 @@ const t = useTranslations(lang);
         </div>
       </section>
     </aside>
-    <main>
-      <div class="xl:hidden">
+    <main class="pt-6">
+      <hr class="border-black xl:hidden" />
+      <header class="hidden pt-8 xl:block">
+        <HeaderTxt />
+      </header>
+
+      <div class="py-4">
+        <Form client:load lang={lang} />
+      </div>
+      <div class="xl:hidden pt-6">
         <FooterInfo />
       </div>
     </main>
