@@ -1,4 +1,4 @@
-import React, { type FormEvent } from "react";
+import React, { type FormEvent, useState } from "react";
 import { TextInputGroup } from "./TextInputGroup";
 import { useTranslations } from "../i18n/utils";
 import type { AvailableLanguages, ui } from "../i18n/ui";
@@ -32,7 +32,8 @@ type FormAction =
   | { type: "SET_NAME"; payload: Field }
   | { type: "SET_SURNAME"; payload: Field }
   | { type: "SET_EMAIL"; payload: Field }
-  | { type: "SET_INSTITUTION"; payload: Field };
+  | { type: "SET_INSTITUTION"; payload: Field }
+  | { type: "INVALIDATE_FORM" };
 
 const initialState: FormState = {
   name: {
@@ -88,6 +89,26 @@ function formReducer(state: FormState, action: FormAction): FormState {
       return { ...state, email: action.payload };
     case "SET_INSTITUTION":
       return { ...state, institution: action.payload };
+    case "INVALIDATE_FORM":
+      return {
+        ...state,
+        name: {
+          ...state.name,
+          isValid: validators["name"](state.name.value).isValid,
+        },
+        surname: {
+          ...state.surname,
+          isValid: validators["surname"](state.name.value).isValid,
+        },
+        email: {
+          ...state.email,
+          isValid: validators["email"](state.name.value).isValid,
+        },
+        institution: {
+          ...state.institution,
+          isValid: validators["institution"](state.name.value).isValid,
+        },
+      };
     default:
       throw new Error(`Unhandled action type: ${action}`);
   }
@@ -99,6 +120,14 @@ const isFieldName = (name: string): name is FieldName =>
 export const Form: React.FC<FormProps> = ({ lang }) => {
   const t = useTranslations(lang);
   const [state, dispatch] = React.useReducer(formReducer, initialState);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [formValid, setFormValid] = useState(false);
+
+  React.useEffect(() => {
+    const isFormValid =
+      Object.values(state).every((field) => field.isValid) && termsAccepted;
+    setFormValid(isFormValid);
+  }, [state, termsAccepted]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -119,8 +148,10 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle your form submission logic here
-    console.log("Form submitted:", state);
+
+    if (formValid) {
+      console.log("Form submitted:", state);
+    }
   };
 
   return (
@@ -180,19 +211,26 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
             id="terms"
             name="terms"
             className="w-8 h-8 bg-gray-300 border border-gray-400"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              dispatch({ type: "INVALIDATE_FORM" });
+
+              setTermsAccepted(e.target.checked);
+            }}
           />
         </div>
         <label htmlFor="terms" className="text-base">
           {t("form.terms")}
+          <span className="text-red-500"> *</span>
         </label>
       </div>
 
       <div className="pt-8">
         <button
           type="submit"
-          className="bg-black text-white font-warsaw font-bold text-lg py-3 block w-full uppercase"
+          className="bg-black text-white font-warsaw font-bold text-lg py-3 block w-full uppercase disabled:bg-gray-500"
+          disabled={!formValid}
         >
-          Wyślij
+          {t("form.submit")}
         </button>
       </div>
     </form>
