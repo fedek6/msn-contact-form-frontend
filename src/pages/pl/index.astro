@@ -3,13 +3,14 @@ import { getLangFromUrl, useTranslations } from "../../i18n/utils";
 import Logo from "../../components/Logo.astro";
 import Layout from "../../layouts/Layout.astro";
 import LangSwitcher from "../../components/LangSwitcher.astro";
+import FooterInfo from "../../components/FooterInfo.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<Layout title="MSN.">
-  <main>
+<Layout title="MSN formularz kontaktowy">
+  <div>
     <aside>
       <header class="mb-4">
         <div class="w-1/3">
@@ -27,8 +28,9 @@ const t = useTranslations(lang);
           Muzeum Sztuki Nowoczesnej w Warszawie przenosi się do siedziby na
           placu Defilad. To nowy początek. Przed nami wielkie otwarcie i program
           wyjątkowych wydarzeń. Chcemy, by wybrane z nich stały się okazją do
-          spotkania z Tobą. Zostaw nam swój adres mailowy — <strong>prześlemy Ci
-          zaproszenia i poinformujemy o naszych planach</strong>.
+          spotkania z Tobą. Zostaw nam swój adres mailowy — <strong
+            >prześlemy Ci zaproszenia i poinformujemy o naszych planach</strong
+          >.
         </p>
         <p class="text-black pb-4">
           Do zobaczenia jesienią podczas otwarcia Muzeum Sztuki Nowoczesnej w
@@ -38,7 +40,16 @@ const t = useTranslations(lang);
         <p class="text-black pb-4">
           Zespół<br />Muzeum
         </p>
+
+        <div class="hidden xl:block">
+          <FooterInfo />
+        </div>
       </section>
     </aside>
-  </main>
+    <main>
+      <div class="xl:hidden">
+        <FooterInfo />
+      </div>
+    </main>
+  </div>
 </Layout>
