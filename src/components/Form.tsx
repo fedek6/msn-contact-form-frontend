@@ -1,8 +1,12 @@
 import React, { type FormEvent, useState } from "react";
 import { TextInputGroup } from "./TextInputGroup";
 import { useTranslations } from "../i18n/utils";
-import { showLoader, redirectToThankYouPage, hideLoader } from "../utils/loaderUtils";
-import type { AvailableLanguages, ui } from "../i18n/ui";
+import {
+  showLoader,
+  redirectToThankYouPage,
+  hideLoader,
+} from "../utils/loaderUtils";
+import type { AvailableLanguages, TranslationKeys, ui } from "../i18n/ui";
 
 interface FormProps {
   lang: AvailableLanguages;
@@ -71,7 +75,7 @@ const validators: Validators = {
   email: (value: string) => ({
     isValid:
       value.length > 0 &&
-      /^\w+([+.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value),
+      /^\w+([+.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,6})+$/.test(value),
     errorMsg: value.length === 0 ? "form.not_empty" : "form.email_error",
   }),
   institution: (value: string) => ({
@@ -125,23 +129,23 @@ const sendToApi = async (data: {
   institution?: string;
   language: AvailableLanguages;
 }) => {
-  const response = await fetch("https://zaproszenie.artmuseum.pl/api/", {
+  return await fetch("https://zaproszenie.artmuseum.pl/api/", {
     method: "POST",
     body: JSON.stringify(data),
   });
+};
 
-  if (response.status !== 201) {
-    throw new Error(`API request failed with status ${response.status}`);
-  }
-
-  return response.json();
-}
-
+/**
+ * Form components.
+ * @param param0
+ * @returns
+ */
 export const Form: React.FC<FormProps> = ({ lang }) => {
   const t = useTranslations(lang);
   const [state, dispatch] = React.useReducer(formReducer, initialState);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [formValid, setFormValid] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   React.useEffect(() => {
     const isFormValid =
@@ -173,17 +177,29 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
       showLoader();
 
       try {
-        await sendToApi({
+        const response = await sendToApi({
           name: state.name.value,
           surname: state.surname.value,
           email: state.email.value,
           institution: state.institution.value,
           language: lang,
         });
+        const responseData = await response.json();
+
+        if (response.status !== 201) {
+          
+          if (responseData.handler) {
+            const errorHandler = responseData.handler as TranslationKeys;
+            setFormError(t(errorHandler));
+          }
+          hideLoader();
+          return;
+        }
+
         window && redirectToThankYouPage(lang);
       } catch (e) {
         console.error(e);
-        alert(t("form.send_error"));
+        setFormError(t("form.send_error"));
         hideLoader();
       }
     }
@@ -191,6 +207,11 @@ export const Form: React.FC<FormProps> = ({ lang }) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {formError && (
+        <div className="text-red-500 text-lg font-bold font-theinhardt border-b border-b-red-500 py-4 mb-4">
+          {formError}
+        </div>
+      )}
       <TextInputGroup
         id="name-input"
         isValid={state.name.isValid}
