@@ -9,7 +9,7 @@ export const ui = {
   pl: {
     "txt.header": "Dołącz do naszej listy kontaktowej",
     "form.name": "Imię",
-    "form.surname": "Naziwsko",
+    "form.surname": "Nazwisko",
     "form.email": "E-mail",
     "form.institution": "Instytucja",
     "form.not_empty": "To pole nie może być puste",
