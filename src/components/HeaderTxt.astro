@@ -1,0 +1,7 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<h1 class="text-xl font-warsaw uppercase leading-7">{t("txt.header")}</h1>

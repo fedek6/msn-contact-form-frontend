@@ -1,0 +1,9 @@
+---
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<footer class="border-t border-t-black text-sm xl:text-base leading-6 pt-4">
+  <p set:html={t("txt.disclaimer")} />
+</footer>
